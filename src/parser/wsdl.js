@@ -158,6 +158,7 @@ class WSDL {
     }
 
     this.options.forceSoapVersion = options.forceSoapVersion;
+    this.options.overrideImportLocation = options.overrideImportLocation;
 
     this.options.valueKey = options.valueKey || this.valueKey;
     this.options.xmlKey = options.xmlKey || this.xmlKey;
@@ -169,7 +170,7 @@ class WSDL {
     if (options.httpClient) {
       this.options.httpClient = options.httpClient;
     }
-    
+
     if (options.request) {
       this.options.request = options.request;
     }
@@ -205,6 +206,10 @@ class WSDL {
       includePath = path.resolve(path.dirname(self.uri), include.location);
     } else {
       includePath = url.resolve(self.uri, include.location);
+    }
+
+    if (typeof this.options.overrideImportLocation === 'function') {
+      includePath = this.options.overrideImportLocation(includePath);
     }
 
     debugInclude('Processing: ', include, includePath);
